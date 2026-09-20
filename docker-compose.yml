@@ -6,7 +6,11 @@ services:
     ports:
       - "8764:8080"
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2)"]
+      test:
+        - "CMD"
+        - "python"
+        - "-c"
+        - "import json,sys,urllib.request; body=json.load(urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=2)); sys.exit(0 if body.get('ok') and body.get('zone')=='Asia/Shanghai' else 1)"
       interval: 5s
       timeout: 3s
       retries: 5
